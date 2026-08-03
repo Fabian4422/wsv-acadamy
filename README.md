@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Weistropper SV Academy
 
-## Getting Started
+Internes Trainingsportal für Jugendtrainer des Weistropper SV.
 
-First, run the development server:
+## Voraussetzungen
+
+- Node.js 20+
+- Supabase-Projekt mit Tabelle `exercises` und Auth
+
+## Setup
+
+1. Abhängigkeiten installieren:
+
+```bash
+npm install
+```
+
+2. Umgebungsvariablen anlegen – `.env.example` nach `.env.local` kopieren und Werte aus Supabase (Settings → API) eintragen:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable | Woher |
+|----------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `anon` / public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | `service_role` key (nur Server, geheim halten) |
+
+3. RLS-Policies in Supabase ausführen: Inhalt von [`supabase/policies.sql`](supabase/policies.sql) im SQL-Editor einfügen und ausführen.
+
+4. Admin-Rolle setzen: In Supabase → Authentication → Users deinen User öffnen und unter `app_metadata` speichern:
+
+```json
+{ "role": "admin" }
+```
+
+Ohne diesen Eintrag greift vorübergehend der E-Mail-Bootstrap für `fabian.4422k@gmail.com`. Für Schreib-Policies (RLS) ist `app_metadata.role = admin` erforderlich.
+
+5. Dev-Server starten:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Öffne [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Nutzung
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Trainer:** Login mit den Zugangsdaten, die der Admin übergibt. Keine öffentliche Registrierung.
+- **Admin:** Link „Admin“ in der Navigation → Trainer-Accounts anlegen, Passwort einmalig kopieren und persönlich übergeben. Übungen anlegen/bearbeiten/löschen im Portal.
 
-## Learn More
+## Deploy (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
+1. Repo mit Vercel verbinden.
+2. Dieselben Env-Vars wie in `.env.local` in Vercel setzen (Production + Preview).
+3. Deployen und Login sowie Admin-User-Anlage testen.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16, React 19, Tailwind CSS 4
+- Supabase Auth + Database
