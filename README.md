@@ -29,13 +29,15 @@ cp .env.example .env.local
 
 3. RLS-Policies in Supabase ausführen: Inhalt von [`supabase/policies.sql`](supabase/policies.sql) im SQL-Editor einfügen und ausführen.
 
-4. Admin-Account einrichten (einmalig in Supabase → Authentication → Users):
+4. Mehrfach-Kategorien aktivieren: Inhalt von [`supabase/categories.sql`](supabase/categories.sql) im SQL-Editor ausführen (wandelt `category` in `text[]` um).
+
+5. Admin-Account einrichten (einmalig in Supabase → Authentication → Users):
 
    - **E-Mail** auf synthetische Adresse setzen, z. B. `fabian@users.wsv-academy.internal` (entspricht Nutzername `fabian`)
    - **User Metadata:** `{ "username": "fabian" }`
    - **App Metadata:** `{ "role": "admin" }` (für Admin-Rechte und RLS-Schreibzugriff erforderlich)
 
-5. Dev-Server starten:
+6. Dev-Server starten:
 
 ```bash
 npm run dev

@@ -26,6 +26,12 @@ function youtubeUrlFromId(videoId: string): string {
   return `https://www.youtube.com/watch?v=${videoId}`;
 }
 
+function toggleItem<T>(items: T[], item: T): T[] {
+  return items.includes(item)
+    ? items.filter((current) => current !== item)
+    : [...items, item];
+}
+
 export function AdminExerciseForm({
   onSuccess,
   initialDrill = null,
@@ -34,7 +40,7 @@ export function AdminExerciseForm({
   const isEditing = Boolean(initialDrill);
 
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState<Category>(CATEGORIES[0]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedAltersklassen, setSelectedAltersklassen] = useState<AgeGroup[]>(
     [],
   );
@@ -50,7 +56,7 @@ export function AdminExerciseForm({
   useEffect(() => {
     if (!initialDrill) {
       setTitle("");
-      setCategory(CATEGORIES[0]);
+      setSelectedCategories([]);
       setSelectedAltersklassen([]);
       setSchwerpunkt("Passspiel");
       setYoutubeUrl("");
@@ -61,10 +67,10 @@ export function AdminExerciseForm({
     }
 
     setTitle(initialDrill.title);
-    setCategory(
-      CATEGORIES.includes(initialDrill.category as Category)
-        ? (initialDrill.category as Category)
-        : CATEGORIES[0],
+    setSelectedCategories(
+      initialDrill.categories.filter((item): item is Category =>
+        CATEGORIES.includes(item as Category),
+      ),
     );
     setSelectedAltersklassen(initialDrill.ageGroups);
     setSchwerpunkt(initialDrill.focus[0] ?? "Passspiel");
@@ -74,17 +80,9 @@ export function AdminExerciseForm({
     setThumbnailUrl(initialDrill.thumbnailUrl || DEFAULT_THUMBNAIL);
   }, [initialDrill]);
 
-  function handleCheckboxChange(group: AgeGroup) {
-    setSelectedAltersklassen((current) =>
-      current.includes(group)
-        ? current.filter((item) => item !== group)
-        : [...current, group],
-    );
-  }
-
   function resetCreateForm() {
     setTitle("");
-    setCategory(CATEGORIES[0]);
+    setSelectedCategories([]);
     setSelectedAltersklassen([]);
     setSchwerpunkt("Passspiel");
     setYoutubeUrl("");
@@ -97,6 +95,11 @@ export function AdminExerciseForm({
     event.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
+
+    if (selectedCategories.length === 0) {
+      setErrorMessage("Bitte mindestens eine Kategorie auswählen.");
+      return;
+    }
 
     if (selectedAltersklassen.length === 0) {
       setErrorMessage("Bitte mindestens eine Altersklasse auswählen.");
@@ -112,7 +115,8 @@ export function AdminExerciseForm({
 
     const payload = {
       title,
-      category,
+      // Als Array speichern (text[]); Fallback siehe supabase/categories.sql
+      category: selectedCategories,
       age_groups: selectedAltersklassen,
       schwerpunkt,
       youtube_url: youtubeUrl,
@@ -167,22 +171,40 @@ export function AdminExerciseForm({
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-800">
-            Kategorie
-          </label>
-          <select
-            required
-            value={category}
-            onChange={(e) => setCategory(e.target.value as Category)}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-          >
-            {CATEGORIES.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+        <div className="md:col-span-2">
+          <fieldset>
+            <legend className="mb-2 text-sm font-medium text-zinc-800">
+              Kategorien
+            </legend>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {CATEGORIES.map((item) => {
+                const checked = selectedCategories.includes(item);
+                return (
+                  <label
+                    key={item}
+                    className={[
+                      "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors",
+                      checked
+                        ? "border-green-600 bg-green-50 text-zinc-900"
+                        : "border-zinc-200 text-zinc-700 hover:border-zinc-300",
+                    ].join(" ")}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() =>
+                        setSelectedCategories((current) =>
+                          toggleItem(current, item),
+                        )
+                      }
+                      className="h-4 w-4 rounded border-zinc-300 text-green-600 focus:ring-green-500"
+                    />
+                    {item}
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
         </div>
 
         <div>
@@ -223,7 +245,11 @@ export function AdminExerciseForm({
                     <input
                       type="checkbox"
                       checked={checked}
-                      onChange={() => handleCheckboxChange(group)}
+                      onChange={() =>
+                        setSelectedAltersklassen((current) =>
+                          toggleItem(current, group),
+                        )
+                      }
                       className="h-4 w-4 rounded border-zinc-300 text-green-600 focus:ring-green-500"
                     />
                     {group}

@@ -32,7 +32,7 @@ export type FocusArea = (typeof FOCUS_AREAS)[number];
 export type Drill = {
   id: string;
   title: string;
-  category: string;
+  categories: Category[];
   focus: FocusArea[];
   ageGroups: AgeGroup[];
   thumbnailUrl: string;
@@ -46,4 +46,11 @@ export function formatAgeGroupLabel(ageGroups: AgeGroup[]): string {
   if (ageGroups.length === 1) return ageGroups[0];
   if (ageGroups.length === 2) return `${ageGroups[0]} · ${ageGroups[1]}`;
   return `${ageGroups[0]} +${ageGroups.length - 1}`;
+}
+
+export function formatCategoryLabel(categories: Category[]): string {
+  if (categories.length === 0) return "";
+  if (categories.length === 1) return categories[0];
+  if (categories.length === 2) return `${categories[0]} · ${categories[1]}`;
+  return `${categories[0]} +${categories.length - 1}`;
 }

@@ -1,4 +1,4 @@
-import type { AgeGroup, Drill, FocusArea } from "@/data/drills";
+import type { AgeGroup, Category, Drill, FocusArea } from "@/data/drills";
 
 type ExerciseRow = Record<string, unknown>;
 
@@ -50,6 +50,10 @@ export function mapExercise(row: ExerciseRow): Drill {
     row.age_groups ?? row.ageGroups ?? row.altersklassen ?? row.altersklasse,
   ) as AgeGroup[];
 
+  const categories = asStringArray(
+    row.categories ?? row.category ?? row.kategorien ?? row.kategorie,
+  ) as Category[];
+
   const youtubeVideoId =
     firstString(row.youtube_video_id, row.youtubeVideoId, row.video_id) ||
     extractYoutubeId(row.youtube_url ?? row.video_url ?? row.url);
@@ -57,7 +61,12 @@ export function mapExercise(row: ExerciseRow): Drill {
   return {
     id: firstString(row.id, row.uuid, row.exercise_id),
     title: firstString(row.title, row.name, row.titel) || "Unbenannte Übung",
-    category: firstString(row.category, row.kategorie, focus[0]),
+    categories:
+      categories.length > 0
+        ? categories
+        : focus[0]
+          ? ([focus[0]] as Category[])
+          : [],
     focus,
     ageGroups,
     thumbnailUrl: firstString(

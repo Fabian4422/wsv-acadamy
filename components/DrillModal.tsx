@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId } from "react";
-import type { Drill } from "@/data/drills";
+import { formatCategoryLabel, type Drill } from "@/data/drills";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 
 type DrillModalProps = {
@@ -69,9 +69,11 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
         </div>
 
         <div className="flex flex-1 flex-col overflow-y-auto p-5 pt-12 sm:p-6 sm:pt-12 lg:p-6">
-          <span className="mb-2 inline-flex w-fit rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-800">
-            {drill.category}
-          </span>
+          {drill.categories.length > 0 && (
+            <span className="mb-2 inline-flex w-fit rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-800">
+              {formatCategoryLabel(drill.categories)}
+            </span>
+          )}
 
           <h2
             id={titleId}
