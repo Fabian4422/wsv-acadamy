@@ -26,6 +26,25 @@ function youtubeUrlFromId(videoId: string): string {
   return `https://www.youtube.com/watch?v=${videoId}`;
 }
 
+function extractYoutubeId(input: string): string {
+  const match = input.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/,
+  );
+  if (match) return match[1];
+  if (/^[A-Za-z0-9_-]{6,}$/.test(input)) return input;
+  return "";
+}
+
+function resolveThumbnailUrl(thumbnailUrl: string, youtubeUrl: string): string {
+  const trimmed = thumbnailUrl.trim();
+  if (trimmed) return trimmed;
+
+  const videoId = extractYoutubeId(youtubeUrl);
+  if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+  return DEFAULT_THUMBNAIL;
+}
+
 function toggleItem<T>(items: T[], item: T): T[] {
   return items.includes(item)
     ? items.filter((current) => current !== item)
@@ -48,7 +67,7 @@ export function AdminExerciseForm({
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [description, setDescription] = useState("");
   const [coachingPoints, setCoachingPoints] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState(DEFAULT_THUMBNAIL);
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -62,22 +81,27 @@ export function AdminExerciseForm({
       setYoutubeUrl("");
       setDescription("");
       setCoachingPoints("");
-      setThumbnailUrl(DEFAULT_THUMBNAIL);
+      setThumbnailUrl("");
       return;
     }
 
     setTitle(initialDrill.title);
     setSelectedCategories(
       initialDrill.categories.filter((item): item is Category =>
-        CATEGORIES.includes(item as Category),
+        (CATEGORIES as readonly string[]).includes(item),
       ),
     );
     setSelectedAltersklassen(initialDrill.ageGroups);
     setSchwerpunkt(initialDrill.focus[0] ?? "Passspiel");
     setYoutubeUrl(youtubeUrlFromId(initialDrill.youtubeVideoId));
     setDescription(initialDrill.description);
-    setCoachingPoints(initialDrill.coachingPoints.join("\n"));
-    setThumbnailUrl(initialDrill.thumbnailUrl || DEFAULT_THUMBNAIL);
+    setCoachingPoints(
+      initialDrill.coachingPoints
+        .map((point) => point.trim())
+        .filter((point) => point.length > 0)
+        .join("\n"),
+    );
+    setThumbnailUrl(initialDrill.thumbnailUrl || "");
   }, [initialDrill]);
 
   function resetCreateForm() {
@@ -88,7 +112,7 @@ export function AdminExerciseForm({
     setYoutubeUrl("");
     setDescription("");
     setCoachingPoints("");
-    setThumbnailUrl(DEFAULT_THUMBNAIL);
+    setThumbnailUrl("");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -115,14 +139,14 @@ export function AdminExerciseForm({
 
     const payload = {
       title,
-      // Als Array speichern (text[]); Fallback siehe supabase/categories.sql
       category: selectedCategories,
       age_groups: selectedAltersklassen,
       schwerpunkt,
       youtube_url: youtubeUrl,
       description,
-      coaching_points: coachingList,
-      thumbnail_url: thumbnailUrl || DEFAULT_THUMBNAIL,
+      // Als Zeilen-Text speichern, damit keine JSON-Artefakte in text-Spalten entstehen
+      coaching_points: coachingList.join("\n"),
+      thumbnail_url: resolveThumbnailUrl(thumbnailUrl, youtubeUrl),
     };
 
     const { error } = isEditing && initialDrill
@@ -280,6 +304,7 @@ export function AdminExerciseForm({
           <input
             value={thumbnailUrl}
             onChange={(e) => setThumbnailUrl(e.target.value)}
+            placeholder="Leer lassen = YouTube-Vorschaubild"
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
