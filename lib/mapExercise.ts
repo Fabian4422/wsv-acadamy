@@ -5,6 +5,8 @@ type ExerciseRow = Record<string, unknown>;
 function firstString(...values: unknown[]): string {
   for (const value of values) {
     if (typeof value === "string" && value.length > 0) return value;
+    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (typeof value === "bigint") return value.toString();
   }
   return "";
 }
@@ -53,7 +55,7 @@ export function mapExercise(row: ExerciseRow): Drill {
     extractYoutubeId(row.youtube_url ?? row.video_url ?? row.url);
 
   return {
-    id: firstString(row.id, row.uuid, row.exercise_id) || crypto.randomUUID(),
+    id: firstString(row.id, row.uuid, row.exercise_id),
     title: firstString(row.title, row.name, row.titel) || "Unbenannte Übung",
     category: firstString(row.category, row.kategorie, focus[0]),
     focus,
