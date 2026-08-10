@@ -49,6 +49,13 @@ export function getAuthErrorMessage(error: AuthError | null): string {
     return "Dieser Account ist noch nicht freigeschaltet. Bitte den Admin kontaktieren.";
   }
 
+  if (
+    error.code === "invalid_credentials" ||
+    error.message.toLowerCase().includes("invalid login credentials")
+  ) {
+    return "Nutzername oder Passwort ist falsch.";
+  }
+
   return error.message;
 }
 

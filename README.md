@@ -29,13 +29,11 @@ cp .env.example .env.local
 
 3. RLS-Policies in Supabase ausführen: Inhalt von [`supabase/policies.sql`](supabase/policies.sql) im SQL-Editor einfügen und ausführen.
 
-4. Admin-Rolle setzen: In Supabase → Authentication → Users deinen User öffnen und unter `app_metadata` speichern:
+4. Admin-Account einrichten (einmalig in Supabase → Authentication → Users):
 
-```json
-{ "role": "admin" }
-```
-
-Ohne diesen Eintrag greift vorübergehend der E-Mail-Bootstrap für `fabian.4422k@gmail.com`. Für Schreib-Policies (RLS) ist `app_metadata.role = admin` erforderlich.
+   - **E-Mail** auf synthetische Adresse setzen, z. B. `fabian@users.wsv-academy.internal` (entspricht Nutzername `fabian`)
+   - **User Metadata:** `{ "username": "fabian" }`
+   - **App Metadata:** `{ "role": "admin" }` (für Admin-Rechte und RLS-Schreibzugriff erforderlich)
 
 5. Dev-Server starten:
 
@@ -47,8 +45,8 @@ npm run dev
 
 ## Nutzung
 
-- **Trainer:** Login mit den Zugangsdaten, die der Admin übergibt. Keine öffentliche Registrierung.
-- **Admin:** Link „Admin“ in der Navigation → Trainer-Accounts anlegen, Passwort einmalig kopieren und persönlich übergeben. Übungen anlegen/bearbeiten/löschen im Portal.
+- **Trainer:** Login mit Nutzername und Passwort, die der Admin übergibt. Keine öffentliche Registrierung, keine E-Mails vom System.
+- **Admin:** Link „Admin“ in der Navigation → Trainer-Accounts mit Nutzername anlegen, Passwort einmalig kopieren und persönlich übergeben. Übungen anlegen/bearbeiten/löschen im Portal.
 
 ## Deploy (Vercel)
 

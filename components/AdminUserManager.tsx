@@ -5,16 +5,14 @@ import { useAuth } from "@/lib/useAuth";
 
 type ListedUser = {
   id: string;
-  email: string;
-  displayName: string;
+  username: string;
   role: string;
   createdAt: string;
 };
 
 type CreatedCredentials = {
-  email: string;
+  username: string;
   password: string;
-  displayName: string;
 };
 
 function generatePassword(length = 12): string {
@@ -30,9 +28,8 @@ export function AdminUserManager() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [created, setCreated] = useState<CreatedCredentials | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
@@ -90,10 +87,10 @@ export function AdminUserManager() {
       const response = await fetch("/api/admin/users", {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ email, password, displayName }),
+        body: JSON.stringify({ username, password }),
       });
       const data = (await response.json()) as {
-        user?: { email: string; displayName: string };
+        user?: { username: string };
         password?: string;
         error?: string;
       };
@@ -104,13 +101,11 @@ export function AdminUserManager() {
       }
 
       setCreated({
-        email: data.user.email,
+        username: data.user.username,
         password: data.password,
-        displayName: data.user.displayName,
       });
-      setEmail("");
+      setUsername("");
       setPassword("");
-      setDisplayName("");
       await fetchUsers();
     } catch (error) {
       setErrorMessage(
@@ -121,10 +116,10 @@ export function AdminUserManager() {
     }
   }
 
-  async function handleDelete(userId: string, userEmail: string) {
+  async function handleDelete(userId: string, userUsername: string) {
     if (!accessToken) return;
     const confirmed = window.confirm(
-      `Benutzer „${userEmail}“ wirklich löschen?`,
+      `Benutzer „${userUsername}“ wirklich löschen?`,
     );
     if (!confirmed) return;
 
@@ -149,7 +144,7 @@ export function AdminUserManager() {
 
   async function copyCredentials() {
     if (!created) return;
-    const text = `E-Mail: ${created.email}\nPasswort: ${created.password}`;
+    const text = `Nutzername: ${created.username}\nPasswort: ${created.password}`;
     try {
       await navigator.clipboard.writeText(text);
       setCopyFeedback("Zugangsdaten kopiert.");
@@ -163,32 +158,23 @@ export function AdminUserManager() {
       <section className="rounded-xl border border-green-200 bg-white p-6 shadow-md">
         <h2 className="text-lg font-bold text-zinc-900">Trainer anlegen</h2>
         <p className="mt-1 mb-5 text-sm text-zinc-600">
-          Lege einen Account an und übergib E-Mail sowie Passwort persönlich.
+          Lege einen Account an und übergib Nutzername sowie Passwort persönlich.
           Das Passwort wird nur einmal angezeigt.
         </p>
 
         <form className="grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleCreate}>
           <div>
             <label className="mb-1 block text-sm font-medium text-zinc-800">
-              E-Mail
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium text-zinc-800">
-              Anzeigename (optional)
+              Nutzername
             </label>
             <input
               type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              required
+              minLength={3}
+              maxLength={32}
+              autoComplete="off"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
             />
           </div>
@@ -239,15 +225,9 @@ export function AdminUserManager() {
               Account erstellt – Zugangsdaten jetzt übergeben:
             </p>
             <dl className="mt-3 space-y-1 text-sm text-green-900">
-              {created.displayName && (
-                <div>
-                  <dt className="inline font-medium">Name: </dt>
-                  <dd className="inline">{created.displayName}</dd>
-                </div>
-              )}
               <div>
-                <dt className="inline font-medium">E-Mail: </dt>
-                <dd className="inline">{created.email}</dd>
+                <dt className="inline font-medium">Nutzername: </dt>
+                <dd className="inline">{created.username}</dd>
               </div>
               <div>
                 <dt className="inline font-medium">Passwort: </dt>
@@ -293,21 +273,18 @@ export function AdminUserManager() {
               >
                 <div>
                   <p className="text-sm font-medium text-zinc-900">
-                    {user.email}
+                    {user.username}
                     {user.role === "admin" && (
                       <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
                         Admin
                       </span>
                     )}
                   </p>
-                  {user.displayName && (
-                    <p className="text-xs text-zinc-500">{user.displayName}</p>
-                  )}
                 </div>
                 {user.role !== "admin" && (
                   <button
                     type="button"
-                    onClick={() => handleDelete(user.id, user.email)}
+                    onClick={() => handleDelete(user.id, user.username)}
                     className="text-sm font-medium text-red-600 hover:text-red-700"
                   >
                     Löschen

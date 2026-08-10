@@ -6,13 +6,18 @@ import {
   reportConnectionError,
 } from "@/lib/auth-errors";
 import { supabase } from "@/lib/supabase";
+import {
+  normalizeUsername,
+  usernameToAuthEmail,
+  validateUsername,
+} from "@/lib/username-auth";
 
 type LoginFormProps = {
   onSuccess?: () => void;
 };
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -20,11 +25,18 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErrorMessage(null);
+
+    const validationError = validateUsername(username);
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: usernameToAuthEmail(normalizeUsername(username)),
         password,
       });
 
@@ -47,25 +59,25 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold text-zinc-900">Anmelden</h2>
         <p className="mt-1 text-sm text-zinc-600">
-          Melde dich mit den Zugangsdaten an, die du vom Admin erhalten hast.
+          Melde dich mit Nutzername und Passwort an, die du vom Admin erhalten hast.
         </p>
       </div>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
           <label
-            htmlFor="email"
+            htmlFor="username"
             className="mb-1 block text-sm font-medium text-zinc-800"
           >
-            E-Mail
+            Nutzername
           </label>
           <input
-            id="email"
-            type="email"
+            id="username"
+            type="text"
             required
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
             className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition-colors focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>

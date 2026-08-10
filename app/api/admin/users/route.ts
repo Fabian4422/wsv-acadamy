@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import {
+  getUsernameFromUser,
+  isDuplicateUsernameError,
+  normalizeUsername,
+  usernameToAuthEmail,
+  validateUsername,
+} from "@/lib/username-auth";
 
 export async function GET(request: Request) {
   const admin = await requireAdmin(request);
@@ -18,19 +25,17 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const users = (data.users ?? []).map((user) => ({
-      id: user.id,
-      email: user.email ?? "",
-      displayName:
-        typeof user.user_metadata?.display_name === "string"
-          ? user.user_metadata.display_name
-          : "",
-      role:
-        typeof user.app_metadata?.role === "string"
-          ? user.app_metadata.role
-          : "trainer",
-      createdAt: user.created_at,
-    }));
+    const users = (data.users ?? [])
+      .map((user) => ({
+        id: user.id,
+        username: getUsernameFromUser(user) ?? "",
+        role:
+          typeof user.app_metadata?.role === "string"
+            ? user.app_metadata.role
+            : "trainer",
+        createdAt: user.created_at,
+      }))
+      .filter((user) => user.username.length > 0);
 
     return NextResponse.json({ users });
   } catch (error) {
@@ -48,18 +53,21 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as {
-      email?: string;
+      username?: string;
       password?: string;
-      displayName?: string;
     };
 
-    const email = body.email?.trim().toLowerCase() ?? "";
+    const username = normalizeUsername(body.username ?? "");
     const password = body.password ?? "";
-    const displayName = body.displayName?.trim() ?? "";
 
-    if (!email || !password) {
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return NextResponse.json({ error: usernameError }, { status: 400 });
+    }
+
+    if (!password) {
       return NextResponse.json(
-        { error: "E-Mail und Passwort sind erforderlich." },
+        { error: "Passwort ist erforderlich." },
         { status: 400 },
       );
     }
@@ -73,21 +81,26 @@ export async function POST(request: Request) {
 
     const supabaseAdmin = getSupabaseAdmin();
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
-      email,
+      email: usernameToAuthEmail(username),
       password,
       email_confirm: true,
-      user_metadata: displayName ? { display_name: displayName } : undefined,
+      user_metadata: { username },
     });
 
     if (error) {
+      if (isDuplicateUsernameError(error.message)) {
+        return NextResponse.json(
+          { error: "Dieser Nutzername ist bereits vergeben." },
+          { status: 400 },
+        );
+      }
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json({
       user: {
         id: data.user.id,
-        email: data.user.email ?? email,
-        displayName,
+        username,
       },
       password,
     });

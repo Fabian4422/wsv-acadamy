@@ -36,7 +36,7 @@ export function TopNav() {
         {!loading && user ? (
           <>
             <span className="hidden text-sm text-zinc-600 sm:inline">
-              {user.email}
+              {user.username}
               {isAdmin && (
                 <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
                   Admin

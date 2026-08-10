@@ -12,6 +12,7 @@ import {
 import type { User } from "@supabase/supabase-js";
 import { isAdminUser, type AppUser } from "@/lib/auth-credentials";
 import { supabase } from "@/lib/supabase";
+import { getUsernameFromUser } from "@/lib/username-auth";
 
 type AuthContextValue = {
   user: AppUser | null;
@@ -24,8 +25,9 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 function toAppUser(user: User | null): AppUser | null {
-  if (!user?.email) return null;
-  return { email: user.email, id: user.id };
+  const username = getUsernameFromUser(user);
+  if (!username) return null;
+  return { username, id: user!.id };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
