@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   title: "Weistropper SV Academy",
   description:
     "Internes Trainingsportal für Jugendtrainer des Weistropper SV",
+  icons: {
+    icon: [{ url: "/wsv-logo.png", type: "image/png" }],
+    apple: [{ url: "/wsv-logo.png", type: "image/png" }],
+    shortcut: "/wsv-logo.png",
+  },
 };
 
 export default function RootLayout({
