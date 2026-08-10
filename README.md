@@ -54,7 +54,10 @@ npm run dev
 
 1. Repo mit Vercel verbinden.
 2. Dieselben Env-Vars wie in `.env.local` in Vercel setzen (Production + Preview).
-3. Deployen und Login sowie Admin-User-Anlage testen.
+3. Unter **Settings → Environments → Production → Branch Tracking** die Production-Branch auf `main` setzen (empfohlen).
+4. Solange Production noch auf `master` zeigt: Pushes auf `main` aktualisieren `master` automatisch per GitHub Action – dadurch geht die Live-Site mit.
+
+Deployen und Login sowie Admin-User-Anlage testen.
 
 ## Stack
 
