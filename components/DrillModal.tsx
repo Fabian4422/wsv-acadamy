@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId } from "react";
-import { formatCategoryLabel, type Drill } from "@/data/drills";
+import { type Drill } from "@/data/drills";
 import { getYoutubeEmbedUrl } from "@/lib/youtube";
 
 type DrillModalProps = {
@@ -31,8 +31,26 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
 
   if (!drill) return null;
 
+  const tags = [
+    ...drill.categories.map((label) => ({
+      key: `category-${label}`,
+      label,
+      tone: "green" as const,
+    })),
+    ...drill.ageGroups.map((label) => ({
+      key: `age-${label}`,
+      label,
+      tone: "zinc" as const,
+    })),
+    ...drill.focus.map((label) => ({
+      key: `focus-${label}`,
+      label,
+      tone: "zinc" as const,
+    })),
+  ].filter((tag, index, list) => list.findIndex((item) => item.label === tag.label) === index);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden p-3 sm:p-4 md:p-6">
       <button
         type="button"
         aria-label="Pop-up schließen"
@@ -44,40 +62,51 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl lg:max-h-[85vh] lg:flex-row"
+        className="relative z-10 flex max-h-[min(90vh,100dvh)] w-full max-w-5xl min-w-0 flex-col overflow-hidden overflow-x-hidden rounded-2xl bg-white shadow-2xl md:grid md:max-h-[85vh] md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:grid-rows-1"
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Schließen"
-          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-900/80 text-white transition-colors hover:bg-zinc-900"
+          className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900/80 text-white transition-colors hover:bg-zinc-900 md:h-9 md:w-9"
         >
           <CloseIcon />
         </button>
 
-        <div className="w-full shrink-0 bg-black lg:w-[58%]">
-          <div className="aspect-video w-full lg:min-h-[320px]">
+        <div className="relative flex w-full min-w-0 shrink-0 items-center justify-center overflow-hidden">
+          <div className="relative aspect-video w-full overflow-hidden">
             <iframe
               key={drill.id}
               src={getYoutubeEmbedUrl(drill.youtubeVideoId)}
               title={drill.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              className="h-full w-full"
+              className="absolute inset-0 block h-full w-full border-0"
             />
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col overflow-y-auto p-5 pt-12 sm:p-6 sm:pt-12 lg:p-6">
-          {drill.categories.length > 0 && (
-            <span className="mb-2 inline-flex w-fit rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-800">
-              {formatCategoryLabel(drill.categories)}
-            </span>
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden px-4 py-5 sm:px-5 sm:py-6 md:h-0 md:min-h-full md:px-6 md:py-6 md:pt-12">
+          {tags.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2 md:pr-10">
+              {tags.map((tag) => (
+                <span
+                  key={tag.key}
+                  className={
+                    tag.tone === "green"
+                      ? "inline-flex max-w-full rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800"
+                      : "inline-flex max-w-full rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-700"
+                  }
+                >
+                  {tag.label}
+                </span>
+              ))}
+            </div>
           )}
 
           <h2
             id={titleId}
-            className="mb-4 text-xl font-bold leading-snug text-zinc-900 sm:text-2xl"
+            className="mb-4 break-words text-xl font-bold leading-snug text-zinc-900 sm:text-2xl md:pr-10"
           >
             {drill.title}
           </h2>
@@ -86,7 +115,7 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
             <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-500">
               Beschreibung
             </h3>
-            <p className="text-sm leading-relaxed text-zinc-700">
+            <p className="break-words text-sm leading-relaxed text-zinc-700">
               {drill.description}
             </p>
           </section>
@@ -95,17 +124,17 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
               Coaching-Points
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {drill.coachingPoints.map((point, index) => (
                 <li
                   key={`${drill.id}-point-${index}`}
-                  className="flex gap-2 text-sm leading-relaxed text-zinc-700"
+                  className="flex gap-2.5 text-sm leading-relaxed text-zinc-700"
                 >
                   <span
                     className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-600"
                     aria-hidden
                   />
-                  {point}
+                  <span className="min-w-0 break-words">{point}</span>
                 </li>
               ))}
             </ul>

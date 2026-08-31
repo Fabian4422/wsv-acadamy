@@ -3,6 +3,7 @@ export function getYoutubeEmbedUrl(videoId: string): string {
     autoplay: "1",
     rel: "0",
     modestbranding: "1",
+    playsinline: "1",
   });
   return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
 }
