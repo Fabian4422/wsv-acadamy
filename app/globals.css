@@ -31,21 +31,25 @@ body {
   max-width: 100%;
 }
 
-/* Desktop: großes Logo wie bisher; Mobile: kompakte natürliche Größe */
+/* Desktop-Logo (unverändert); Mobile nur per max-width: 768px */
 .nav-logo {
   display: block;
-  height: 3.5rem;
+  height: 160px;
   width: auto;
-  max-width: min(100%, 11rem);
+  max-width: none;
+  transform: scale(2);
+  transform-origin: left center;
+  margin-right: 14rem;
+  object-fit: contain;
+  object-position: left center;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 768px) {
   .nav-logo {
-    height: 160px;
-    max-width: none;
-    transform: scale(2);
-    transform-origin: left center;
-    margin-right: 14rem;
+    height: 48px;
+    max-width: min(100%, 18rem);
+    transform: none;
+    margin-right: 0;
   }
 }
 

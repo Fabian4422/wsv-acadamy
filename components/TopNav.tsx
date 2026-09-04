@@ -14,20 +14,20 @@ export function TopNav() {
   }
 
   return (
-    <header className="relative z-50 flex w-full flex-wrap items-center justify-between gap-3 overflow-x-hidden bg-white px-3 py-3 sm:h-24 sm:flex-nowrap sm:gap-4 sm:overflow-y-clip sm:px-6 sm:py-0 sm:pl-2">
-      <div className="flex min-w-0 shrink items-center overflow-hidden sm:h-full sm:shrink-0 sm:overflow-visible">
+    <header className="relative z-50 flex w-full flex-wrap items-center justify-between gap-3 overflow-x-hidden bg-white px-3 py-3 md:h-24 md:flex-nowrap md:gap-4 md:overflow-y-clip md:px-6 md:py-0 md:pl-2">
+      <div className="flex min-w-0 shrink items-center overflow-hidden md:h-full md:shrink-0 md:overflow-visible">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/wsv-logo.png"
           alt="WSV Academy Logo"
-          className="nav-logo block h-14 w-auto max-w-[min(100%,11rem)] object-contain object-left"
+          className="nav-logo block"
         />
       </div>
 
-      <div className="relative z-10 flex max-w-full flex-wrap items-center justify-end gap-2 sm:ml-auto sm:shrink-0 sm:gap-4">
+      <div className="relative z-10 flex max-w-full flex-wrap items-center justify-end gap-2 md:ml-auto md:shrink-0 md:gap-4">
         {!loading && user ? (
           <>
-            <span className="hidden text-sm text-zinc-600 sm:inline">
+            <span className="hidden text-sm text-zinc-600 md:inline">
               {user.username}
               {isAdmin && (
                 <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
@@ -38,7 +38,7 @@ export function TopNav() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className="rounded-md border border-green-600 px-3 py-2 text-sm font-medium text-green-600 transition-colors hover:bg-green-50 sm:px-4"
+                className="rounded-md border border-green-600 px-3 py-2 text-sm font-medium text-green-600 transition-colors hover:bg-green-50 md:px-4"
               >
                 Admin
               </Link>
@@ -46,7 +46,7 @@ export function TopNav() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:px-4"
+              className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 md:px-4"
             >
               Ausloggen
             </button>
@@ -54,7 +54,7 @@ export function TopNav() {
         ) : (
           <Link
             href="/login"
-            className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 sm:px-4"
+            className="rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 md:px-4"
           >
             Login
           </Link>
