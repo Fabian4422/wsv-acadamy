@@ -31,49 +31,6 @@ body {
   max-width: 100%;
 }
 
-/* Desktop-Logo (unverändert); Mobile nur per max-width: 768px */
-.nav-logo {
-  display: block;
-  height: 160px;
-  width: auto;
-  max-width: none;
-  transform: scale(2);
-  transform-origin: left center;
-  margin-right: 14rem;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.nav-logo-wrap {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .nav-header {
-    overflow: visible;
-    max-height: none;
-  }
-
-  .nav-logo-wrap {
-    display: flex;
-    align-items: center;
-    overflow: visible;
-    min-width: auto;
-    max-height: none;
-  }
-
-  .nav-logo {
-    height: 48px !important;
-    width: auto !important;
-    max-width: none !important;
-    max-height: none !important;
-    transform: none !important;
-    margin-right: 0 !important;
-  }
-}
-
 /* Mobile: volle Breite für Hauptcontainer und Karten */
 @media (max-width: 767px) {
   .page-shell,

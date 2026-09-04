@@ -14,17 +14,17 @@ export function TopNav() {
   }
 
   return (
-    <header className="nav-header relative z-50 flex w-full flex-wrap items-center justify-between gap-3 bg-white px-3 py-3 md:h-24 md:flex-nowrap md:gap-4 md:overflow-y-clip md:px-6 md:py-0 md:pl-2">
-      <div className="nav-logo-wrap flex shrink-0 items-center">
+    <header className="relative z-50 flex w-full flex-wrap items-center justify-between gap-3 bg-white p-4 md:h-24 md:flex-nowrap md:overflow-y-clip md:px-6 md:py-0 md:pl-2">
+      <div className="flex shrink-0 items-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/wsv-logo.png"
           alt="WSV Academy Logo"
-          className="nav-logo"
+          className="h-12 w-auto max-w-none object-contain object-left md:h-[160px] md:origin-left md:scale-[2] md:mr-[14rem]"
         />
       </div>
 
-      <div className="relative z-10 flex max-w-full flex-wrap items-center justify-end gap-2 md:ml-auto md:shrink-0 md:gap-4">
+      <div className="relative z-10 flex shrink-0 flex-wrap items-center justify-end gap-2 md:ml-auto md:gap-4">
         {!loading && user ? (
           <>
             <span className="hidden text-sm text-zinc-600 md:inline">
