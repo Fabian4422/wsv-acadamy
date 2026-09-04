@@ -44,12 +44,33 @@ body {
   object-position: left center;
 }
 
+.nav-logo-wrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
+  .nav-header {
+    overflow: visible;
+    max-height: none;
+  }
+
+  .nav-logo-wrap {
+    display: flex;
+    align-items: center;
+    overflow: visible;
+    min-width: auto;
+    max-height: none;
+  }
+
   .nav-logo {
-    height: 48px;
-    max-width: min(100%, 18rem);
-    transform: none;
-    margin-right: 0;
+    height: 48px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    transform: none !important;
+    margin-right: 0 !important;
   }
 }
 
