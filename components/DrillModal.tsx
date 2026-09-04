@@ -50,7 +50,7 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
   ].filter((tag, index, list) => list.findIndex((item) => item.label === tag.label) === index);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden p-3 sm:p-4 md:p-6">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-x-hidden p-0 sm:items-center sm:p-4 md:p-6">
       <button
         type="button"
         aria-label="Pop-up schließen"
@@ -62,7 +62,7 @@ export function DrillModal({ drill, onClose }: DrillModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 flex max-h-[min(90vh,100dvh)] w-full max-w-5xl min-w-0 flex-col overflow-hidden overflow-x-hidden rounded-2xl bg-white shadow-2xl md:grid md:max-h-[85vh] md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:grid-rows-1"
+        className="page-card relative z-10 flex max-h-[min(92vh,100dvh)] w-full max-w-5xl min-w-0 flex-col overflow-hidden overflow-x-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl md:grid md:max-h-[85vh] md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:grid-rows-1"
       >
         <button
           type="button"

@@ -174,7 +174,7 @@ export function AdminExerciseForm({
   }
 
   return (
-    <section className="mb-8 rounded-xl border border-green-200 bg-white p-6 shadow-md">
+    <section className="page-card mb-6 w-full max-w-full rounded-xl border border-green-200 bg-white p-4 shadow-md sm:mb-8 sm:p-6">
       <h3 className="mb-1 text-lg font-bold text-zinc-900">
         {isEditing ? "Übung bearbeiten" : "Neue Übung hinzufügen"}
       </h3>
@@ -182,8 +182,8 @@ export function AdminExerciseForm({
         Nur für Admins – wird direkt in Supabase gespeichert.
       </p>
 
-      <form className="grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
-        <div className="md:col-span-2">
+      <form className="grid w-full grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+        <div className="w-full md:col-span-2">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             Titel
           </label>
@@ -191,23 +191,23 @@ export function AdminExerciseForm({
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
 
-        <div className="md:col-span-2">
-          <fieldset>
+        <div className="w-full md:col-span-2">
+          <fieldset className="w-full">
             <legend className="mb-2 text-sm font-medium text-zinc-800">
               Kategorien
             </legend>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid w-full grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3">
               {CATEGORIES.map((item) => {
                 const checked = selectedCategories.includes(item);
                 return (
                   <label
                     key={item}
                     className={[
-                      "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors",
+                      "flex w-full cursor-pointer items-center gap-2 rounded-lg border px-2 py-2 text-sm transition-colors sm:px-3",
                       checked
                         ? "border-green-600 bg-green-50 text-zinc-900"
                         : "border-zinc-200 text-zinc-700 hover:border-zinc-300",
@@ -221,9 +221,9 @@ export function AdminExerciseForm({
                           toggleItem(current, item),
                         )
                       }
-                      className="h-4 w-4 rounded border-zinc-300 text-green-600 focus:ring-green-500"
+                      className="h-4 w-4 shrink-0 rounded border-zinc-300 text-green-600 focus:ring-green-500"
                     />
-                    {item}
+                    <span className="min-w-0 break-words">{item}</span>
                   </label>
                 );
               })}
@@ -231,14 +231,14 @@ export function AdminExerciseForm({
           </fieldset>
         </div>
 
-        <div>
+        <div className="w-full">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             Schwerpunkt
           </label>
           <select
             value={schwerpunkt}
             onChange={(e) => setSchwerpunkt(e.target.value as FocusArea)}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           >
             {FOCUS_AREAS.map((focus) => (
               <option key={focus} value={focus}>
@@ -248,19 +248,19 @@ export function AdminExerciseForm({
           </select>
         </div>
 
-        <div className="md:col-span-2">
-          <fieldset>
+        <div className="w-full md:col-span-2">
+          <fieldset className="w-full">
             <legend className="mb-2 text-sm font-medium text-zinc-800">
               Altersklassen
             </legend>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="grid w-full grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3">
               {AGE_GROUPS.map((group) => {
                 const checked = selectedAltersklassen.includes(group);
                 return (
                   <label
                     key={group}
                     className={[
-                      "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors",
+                      "flex w-full cursor-pointer items-center gap-2 rounded-lg border px-2 py-2 text-sm transition-colors sm:px-3",
                       checked
                         ? "border-green-600 bg-green-50 text-zinc-900"
                         : "border-zinc-200 text-zinc-700 hover:border-zinc-300",
@@ -274,9 +274,9 @@ export function AdminExerciseForm({
                           toggleItem(current, group),
                         )
                       }
-                      className="h-4 w-4 rounded border-zinc-300 text-green-600 focus:ring-green-500"
+                      className="h-4 w-4 shrink-0 rounded border-zinc-300 text-green-600 focus:ring-green-500"
                     />
-                    {group}
+                    <span className="min-w-0 break-words">{group}</span>
                   </label>
                 );
               })}
@@ -284,7 +284,7 @@ export function AdminExerciseForm({
           </fieldset>
         </div>
 
-        <div className="md:col-span-2">
+        <div className="w-full md:col-span-2">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             YouTube-URL
           </label>
@@ -293,11 +293,11 @@ export function AdminExerciseForm({
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
             placeholder="https://www.youtube.com/watch?v=..."
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
 
-        <div className="md:col-span-2">
+        <div className="w-full md:col-span-2">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             Bild-URL (optional)
           </label>
@@ -305,11 +305,11 @@ export function AdminExerciseForm({
             value={thumbnailUrl}
             onChange={(e) => setThumbnailUrl(e.target.value)}
             placeholder="Leer lassen = YouTube-Vorschaubild"
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
 
-        <div className="md:col-span-2">
+        <div className="w-full md:col-span-2">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             Beschreibung
           </label>
@@ -318,11 +318,11 @@ export function AdminExerciseForm({
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
 
-        <div className="md:col-span-2">
+        <div className="w-full md:col-span-2">
           <label className="mb-1 block text-sm font-medium text-zinc-800">
             Coaching-Points (eine pro Zeile)
           </label>
@@ -331,27 +331,27 @@ export function AdminExerciseForm({
             value={coachingPoints}
             onChange={(e) => setCoachingPoints(e.target.value)}
             placeholder={"Punkt 1\nPunkt 2"}
-            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+            className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
           />
         </div>
 
         {errorMessage && (
-          <p className="md:col-span-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+          <p className="w-full md:col-span-2 rounded-md bg-red-50 px-3 py-2 text-sm break-words text-red-700">
             {errorMessage}
           </p>
         )}
 
         {successMessage && (
-          <p className="md:col-span-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-800">
+          <p className="w-full md:col-span-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-800">
             {successMessage}
           </p>
         )}
 
-        <div className="md:col-span-2 flex flex-wrap gap-3">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap md:col-span-2">
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+            className="w-full rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60 sm:w-auto"
           >
             {submitting
               ? "Speichern…"
@@ -363,7 +363,7 @@ export function AdminExerciseForm({
             <button
               type="button"
               onClick={onCancelEdit}
-              className="rounded-md border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+              className="w-full rounded-md border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 sm:w-auto"
             >
               Abbrechen
             </button>

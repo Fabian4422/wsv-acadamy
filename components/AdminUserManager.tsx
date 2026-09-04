@@ -154,16 +154,16 @@ export function AdminUserManager() {
   }
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-xl border border-green-200 bg-white p-6 shadow-md">
+    <div className="w-full max-w-full space-y-6 sm:space-y-8">
+      <section className="page-card w-full max-w-full rounded-xl border border-green-200 bg-white p-4 shadow-md sm:p-6">
         <h2 className="text-lg font-bold text-zinc-900">Trainer anlegen</h2>
         <p className="mt-1 mb-5 text-sm text-zinc-600">
           Lege einen Account an und übergib Nutzername sowie Passwort persönlich.
           Das Passwort wird nur einmal angezeigt.
         </p>
 
-        <form className="grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleCreate}>
-          <div>
+        <form className="grid w-full grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleCreate}>
+          <div className="w-full">
             <label className="mb-1 block text-sm font-medium text-zinc-800">
               Nutzername
             </label>
@@ -175,27 +175,27 @@ export function AdminUserManager() {
               autoComplete="off"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+              className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
             />
           </div>
 
-          <div className="md:col-span-2">
+          <div className="w-full md:col-span-2">
             <label className="mb-1 block text-sm font-medium text-zinc-800">
               Passwort
             </label>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex w-full flex-col gap-2 sm:flex-row">
               <input
                 type="text"
                 required
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
+                className="w-full max-w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100"
               />
               <button
                 type="button"
                 onClick={() => setPassword(generatePassword())}
-                className="shrink-0 rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+                className="w-full shrink-0 rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 sm:w-auto"
               >
                 Zufallspasswort
               </button>
@@ -203,16 +203,16 @@ export function AdminUserManager() {
           </div>
 
           {errorMessage && (
-            <p className="md:col-span-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p className="w-full md:col-span-2 rounded-md bg-red-50 px-3 py-2 text-sm break-words text-red-700">
               {errorMessage}
             </p>
           )}
 
-          <div className="md:col-span-2">
+          <div className="w-full md:col-span-2">
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+              className="w-full rounded-md bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60 sm:w-auto"
             >
               {submitting ? "Anlegen…" : "Account anlegen"}
             </button>
@@ -224,7 +224,7 @@ export function AdminUserManager() {
             <p className="text-sm font-semibold text-green-900">
               Account erstellt – Zugangsdaten jetzt übergeben:
             </p>
-            <dl className="mt-3 space-y-1 text-sm text-green-900">
+            <dl className="mt-3 space-y-1 text-sm break-words text-green-900">
               <div>
                 <dt className="inline font-medium">Nutzername: </dt>
                 <dd className="inline">{created.username}</dd>
@@ -237,7 +237,7 @@ export function AdminUserManager() {
             <button
               type="button"
               onClick={copyCredentials}
-              className="mt-3 rounded-md bg-green-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-800"
+              className="mt-3 w-full rounded-md bg-green-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-800 sm:w-auto"
             >
               Kopieren
             </button>
@@ -248,8 +248,8 @@ export function AdminUserManager() {
         )}
       </section>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-md">
-        <div className="mb-4 flex items-center justify-between gap-3">
+      <section className="page-card w-full max-w-full rounded-xl border border-zinc-200 bg-white p-4 shadow-md sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-bold text-zinc-900">Benutzer</h2>
           <button
             type="button"
@@ -271,8 +271,8 @@ export function AdminUserManager() {
                 key={user.id}
                 className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
-                <div>
-                  <p className="text-sm font-medium text-zinc-900">
+                <div className="min-w-0">
+                  <p className="break-words text-sm font-medium text-zinc-900">
                     {user.username}
                     {user.role === "admin" && (
                       <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
@@ -285,7 +285,7 @@ export function AdminUserManager() {
                   <button
                     type="button"
                     onClick={() => handleDelete(user.id, user.username)}
-                    className="text-sm font-medium text-red-600 hover:text-red-700"
+                    className="self-start text-sm font-medium text-red-600 hover:text-red-700"
                   >
                     Löschen
                   </button>

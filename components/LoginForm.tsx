@@ -55,7 +55,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-xl bg-white p-6 shadow-md sm:p-8">
+    <div className="page-card mx-auto w-full max-w-md rounded-xl bg-white p-4 shadow-md sm:p-8">
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold text-zinc-900">Anmelden</h2>
         <p className="mt-1 text-sm text-zinc-600">

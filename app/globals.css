@@ -12,8 +12,48 @@
   --font-mono: var(--font-geist-mono);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Desktop: großes Logo wie bisher; Mobile: kompakte natürliche Größe */
+.nav-logo {
+  display: block;
+  height: 3.5rem;
+  width: auto;
+  max-width: min(100%, 11rem);
+}
+
+@media (min-width: 640px) {
+  .nav-logo {
+    height: 160px;
+    max-width: none;
+    transform: scale(2);
+    transform-origin: left center;
+    margin-right: 14rem;
+  }
+}
+
+/* Mobile: volle Breite für Hauptcontainer und Karten */
+@media (max-width: 767px) {
+  .page-shell,
+  .page-card {
+    width: 100%;
+    max-width: 100%;
+  }
 }

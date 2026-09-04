@@ -16,7 +16,7 @@ export function DrillCard({
   onDelete,
 }: DrillCardProps) {
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
+    <article className="page-card flex w-full max-w-full flex-col overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
       <div className="relative aspect-video w-full overflow-hidden bg-zinc-100">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -26,12 +26,12 @@ export function DrillCard({
         />
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="mb-3 text-lg font-bold leading-snug text-zinc-900">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="mb-3 break-words text-lg font-bold leading-snug text-zinc-900">
           {drill.title}
         </h3>
 
-        <span className="mb-5 inline-flex w-fit rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-800">
+        <span className="mb-5 inline-flex max-w-full w-fit rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold break-words text-green-800">
           {formatAgeGroupLabel(drill.ageGroups)}
         </span>
 
@@ -44,7 +44,7 @@ export function DrillCard({
         </button>
 
         {isAdmin && (
-          <div className="mt-2 flex gap-2">
+          <div className="mt-2 flex w-full gap-2">
             <button
               type="button"
               onClick={() => onEdit?.(drill)}
