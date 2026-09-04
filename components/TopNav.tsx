@@ -19,8 +19,8 @@ export function TopNav() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/wsv-logo.png"
-          alt="WSV Academy Logo"
-          className="h-12 w-auto max-w-none object-contain object-left md:h-[160px] md:origin-left md:scale-[2] md:mr-[14rem]"
+          alt="WSW Academy Logo"
+          style={{ height: "45px", width: "auto", maxHeight: "none" }}
         />
       </div>
 
