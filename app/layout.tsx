@@ -18,9 +18,12 @@ export const metadata: Metadata = {
   description:
     "Internes Trainingsportal für Jugendtrainer des Weistropper SV",
   icons: {
-    icon: [{ url: "/wsv-logo.png", type: "image/png" }],
-    apple: [{ url: "/wsv-logo.png", type: "image/png" }],
-    shortcut: "/wsv-logo.png",
+    icon: [
+      { url: "/wsv-crest.png", type: "image/png", sizes: "any" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+    shortcut: "/wsv-crest.png",
   },
 };
 
