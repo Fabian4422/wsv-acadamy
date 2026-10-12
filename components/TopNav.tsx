@@ -14,18 +14,19 @@ export function TopNav() {
   }
 
   return (
-    <header className="relative z-50 flex min-h-[132px] w-full flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 md:flex-nowrap md:px-6 md:pl-3">
+    <header className="relative z-50 flex min-h-[96px] w-full flex-wrap items-center justify-between gap-3 bg-white px-4 py-3 md:min-h-[112px] md:flex-nowrap md:px-6 md:pl-3">
       <div className="flex shrink-0 items-center overflow-visible">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/wsv-logo.png"
-          alt="WSW Academy Logo"
+          src="/wsv-logo.png?v=2"
+          alt="WSV Academy Logo"
           style={{
-            width: "120px",
-            height: "120px",
-            minWidth: "120px",
-            minHeight: "120px",
+            height: "88px",
+            width: "auto",
+            minHeight: "88px",
+            maxWidth: "min(640px, 75vw)",
             objectFit: "contain",
+            display: "block",
           }}
         />
       </div>
